@@ -1,19 +1,21 @@
-# User Management RESTful API
+# User Management RESTful API with MongoDB
 
-This project is a simple RESTful API built with Node.js and Express to manage a list of users. It uses concepts such as routing, middleware, HTTP methods, status codes, error handling.
+This project is a RESTful API built with Node.js, Express, and MongoDB using Mongoose to manage a list of users. It uses concepts such as routing, middleware, CRUD operations, database interaction, HTTP status codes, error handling, and data validation.
 
 
 
 ## 📌 Features
 
 ✅ Fetch a list of all users  
-✅ Get details of a specific user by ID  
-✅ Add a new user  
+✅ Get details of a specific user by MongoDB ObjectId  
+✅ Add a new user with proper validations  
 ✅ Update an existing user  
-✅ Delete a user by ID  
+✅ Delete a user by ObjectId  
 ✅ Middleware for request logging  
-✅ Middleware for validation of required fields  
-✅ Error handling with status codes and error messages
+✅ Middleware for validating required fields  
+✅ Mongoose schema with validations including unique email  
+✅ Error handling with status codes and error messages  
+✅ Integration with MongoDB Compass
 
 
 

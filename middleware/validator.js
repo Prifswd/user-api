@@ -1,11 +1,10 @@
-
-// middleware to validate required fields for POST and PUT
+// middleware to validate
 
 function validateUser(req, res, next) {
-  const { firstName, lastName, hobby } = req.body;
-  if (!firstName || !lastName || !hobby) {
+  const { firstName, lastName, hobby, email } = req.body;
+  if (!firstName || !lastName || !hobby || !email) {
     return res.status(400).json({
-      error: "firstName, lastName and hobby are required fields"
+      error: "firstName, lastName, hobby, and email are required fields"
     });
   }
   next();
@@ -13,6 +12,7 @@ function validateUser(req, res, next) {
 
 
 export default validateUser;
+
 
 
 

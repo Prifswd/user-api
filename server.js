@@ -1,28 +1,44 @@
 import express from 'express'
+import mongoose from 'mongoose';
 const app = express();
 const PORT = 3000;
 
 import userRoutes from './routes/userRoute.js'
-import logger from './middleware/logger.js'
+import logger from './middleware/logger.js';
 
-// built-in JSON parser
+// in-build middleware to parse json
 app.use(express.json());
 
-// custom logger
+// logger middleware
 app.use(logger);
 
-// user routes
+// routes
 app.use("/", userRoutes);
 
-// route for 404
+// fallback 404
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-// startin server
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}🎈🎈`);
-});
+// connect to MongoDB
+mongoose.connect("mongodb://127.0.0.1:27017/userdb", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log("Connected to MongoDB successfully");
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT} 🎈🎈`);
+  });
+})
+.catch(err => console.error("MongoDB connection failed", err));
+
+
+
+
+
+
+
 
 
 

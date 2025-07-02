@@ -1,21 +1,22 @@
 import express from 'express'
 const router = express.Router()
-import { addUser, deleteUser, getAllUsers, getUserById, updateUser } from '../controllers/userController.js';
-import validateUser from '../middleware/validator.js'
+import {addUser, deleteUser, getAllUsers, getUserById, updateUser} from '../controllers/userController.js'
+import validateUser from '../middleware/validator.js';
 
-// route for fetch user
+// MongoDB routes
+// get user route
 router.get("/users", getAllUsers);
 
-// route for fecth user by id
+// get user by id route
 router.get("/users/:id", getUserById);
 
-// route for create new user
+// post user route with middleware
 router.post("/user", validateUser, addUser);
 
-// route for update user by id
+// update user route with middleware
 router.put("/user/:id", validateUser, updateUser);
 
-// route for delete user by id
+// delete user route
 router.delete("/user/:id", deleteUser);
 
 

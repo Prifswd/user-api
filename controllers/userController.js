@@ -1,53 +1,72 @@
-import users from "../data/user.js";
+import User from "../models/user.js";
 
-// Get all users
-const getAllUsers = (req, res) => {
-  res.status(200).json(users);
-};
-
-// Get user by ID
-const getUserById = (req, res) => {
-  const user = users.find(u => u.id === req.params.id);
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
+// get all users
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
   }
-  res.status(200).json(user);
 };
 
-// Add new user
-const addUser = (req, res) => {
-  const { firstName, lastName, hobby } = req.body;
-  const newUser = {
-    id: (users.length + 1).toString(),
-    firstName,
-    lastName,
-    hobby
-  };
-  users.push(newUser);
-  res.status(201).json(newUser);
-};
-
-// Update user
-const updateUser = (req, res) => {
-  const userIndex = users.findIndex(u => u.id === req.params.id);
-  if (userIndex === -1) {
-    return res.status(404).json({ error: "User not found" });
+// get user by ObjectId
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(400).json({ error: "Invalid ID format" });
   }
-  users[userIndex] = { id: req.params.id, ...req.body };
-  res.status(200).json(users[userIndex]);
 };
 
-// Delete user
-const deleteUser = (req, res) => {
-  const userIndex = users.findIndex(u => u.id === req.params.id);
-  if (userIndex === -1) {
-    return res.status(404).json({ error: "User not found" });
+// add new user
+const addUser = async (req, res) => {
+  try {
+    const newUser = new User(req.body);
+    await newUser.save();
+    res.status(201).json(newUser);
+  } catch (err) {
+    // if duplicate email or other validation error
+    res.status(400).json({ error: err.message });
   }
-  users.splice(userIndex, 1);
-  res.status(200).json({ message: "User deleted successfully" });
 };
 
-export {getAllUsers, getUserById, addUser, updateUser, deleteUser}
+// update user
+const updateUser = async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updatedUser) return res.status(404).json({ error: "User not found" });
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// delete user
+const deleteUser = async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) return res.status(404).json({ error: "User not found" });
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(400).json({ error: "Invalid ID format" });
+  }
+};
+
+
+
+export {getAllUsers, getUserById, addUser, updateUser, deleteUser};
+
+
+
+
+
 
 
 
